@@ -37,7 +37,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->requiredField('test')
             ->regex('test', '/^.*(?=.*\d)(?=.*[a-zA-ZäöüÄÖÜß]).*$/', 'invalid');
 
-        $this->assertEquals(['test' => ['invalid.']], $validator->validate(['test' => new \stdClass()]));
+        $this->assertEquals(['test' => ['invalid']], $validator->validate(['test' => new \stdClass()]));
     }
 
     public function testNoBlank()
