@@ -1,6 +1,7 @@
 {
   "name": "jauert/validator",
   "description": "Very lightweight validator builder.",
+  "license": "MIT",
   "require": {
     "php": ">=7.4"
   },
