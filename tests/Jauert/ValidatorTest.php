@@ -86,4 +86,28 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(['test' => ['This is not a valid email']], $validator->validate(['test' => '@xx.de']));
     }
+
+    public function testAlphaNumeric()
+    {
+        $validator = new Validator();
+        $validator->alphaNumeric('test');
+
+        $this->assertEquals([], $validator->validate(['test' => '110abc']));
+    }
+
+    public function testAlphaNumericFailsOnWhitespace()
+    {
+        $validator = new Validator();
+        $validator->alphaNumeric('test', 'Numbers and letters only');
+
+        $this->assertEquals(['test' => ['Numbers and letters only']], $validator->validate(['test' => '11 0abc']));
+    }
+
+    public function testAlphaNumericFailsOnEmpty()
+    {
+        $validator = new Validator();
+        $validator->alphaNumeric('test', 'Numbers and letters only');
+
+        $this->assertEquals(['test' => ['Numbers and letters only']], $validator->validate(['test' => '']));
+    }
 }

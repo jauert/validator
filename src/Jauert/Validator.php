@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jauert;
 
+use Jauert\Validations\AlphaNumeric;
 use Jauert\Validations\Email;
 use Jauert\Validations\NotBlank;
 use Jauert\Validations\RegEx;
@@ -39,6 +40,7 @@ class Validator
             $validation->setErrorMessage($message);
         }
         $validation->setRegex($regEx);
+
         $this->addValidation($field, $validation);
 
         return $this;
@@ -50,6 +52,7 @@ class Validator
         if ($message) {
             $validation->setErrorMessage($message);
         }
+
         $this->addValidation($field, $validation);
 
         return $this;
@@ -61,6 +64,19 @@ class Validator
         if ($message) {
             $validation->setErrorMessage($message);
         }
+
+        $this->addValidation($field, $validation);
+
+        return $this;
+    }
+
+    public function alphaNumeric(string $field, ?string $message = null): self
+    {
+        $validation = new AlphaNumeric();
+        if ($message) {
+            $validation->setErrorMessage($message);
+        }
+
         $this->addValidation($field, $validation);
 
         return $this;
