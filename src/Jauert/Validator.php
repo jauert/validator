@@ -40,84 +40,51 @@ class Validator
     public function regex(string $field, string $regEx, ?string $message = null): self
     {
         $validation = new RegEx();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
         $validation->setRegex($regEx);
 
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, $validation, $message);
 
         return $this;
     }
 
     public function notBlank(string $field, ?string $message = null): self
     {
-        $validation = new NotBlank();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
-
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, new NotBlank(), $message);
 
         return $this;
     }
 
     public function email(string $field, ?string $message = null): self
     {
-        $validation = new Email();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
-
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, new Email(), $message);
 
         return $this;
     }
 
     public function alphaNumeric(string $field, ?string $message = null): self
     {
-        $validation = new AlphaNumeric();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
-
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, new AlphaNumeric(), $message);
 
         return $this;
     }
 
     public function notAlphaNumeric(string $field, ?string $message = null): self
     {
-        $validation = new NotAlphaNumeric();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
-
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, new NotAlphaNumeric(), $message);
 
         return $this;
     }
 
     public function asciiAlphaNumeric(string $field, ?string $message = null): self
     {
-        $validation = new AsciiAlphaNumeric();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
-
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, new AsciiAlphaNumeric(), $message);
 
         return $this;
     }
 
     public function notAsciiAlphaNumeric(string $field, ?string $message = null): self
     {
-        $validation = new NotAsciiAlphaNumeric();
-        if ($message) {
-            $validation->setErrorMessage($message);
-        }
-
-        $this->addValidation($field, $validation);
+        $this->addValidation($field, new NotAsciiAlphaNumeric(), $message);
 
         return $this;
     }
@@ -136,8 +103,11 @@ class Validator
         }
     }
 
-    private function addValidation(string $field, ValidationInterface $validation)
+    private function addValidation(string $field, ValidationInterface $validation, ?string $message)
     {
+        if ($message) {
+            $validation->setErrorMessage($message);
+        }
         $this->validations[$field][] = $validation;
     }
 
