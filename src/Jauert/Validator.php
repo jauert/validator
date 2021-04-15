@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Jauert;
 
 use Jauert\Validations\AlphaNumeric;
+use Jauert\Validations\AsciiAlphaNumeric;
 use Jauert\Validations\Email;
+use Jauert\Validations\NotAlphaNumeric;
+use Jauert\Validations\NotAsciiAlphaNumeric;
 use Jauert\Validations\NotBlank;
 use Jauert\Validations\RegEx;
 
@@ -17,6 +20,7 @@ class Validator
 
     public function validate(array $data): array
     {
+        $this->errors = [];
         $this->checkForRequiredFields($data);
 
         foreach ($data as $field => $value) {
@@ -26,9 +30,9 @@ class Validator
         return $this->errors;
     }
 
-    public function requiredField(string $field): self
+    public function requiredField(string $field, string $message = 'Field is required.'): self
     {
-        array_push($this->requiredFields, $field);
+        $this->requiredFields[$field] = $message;
 
         return $this;
     }
@@ -82,6 +86,42 @@ class Validator
         return $this;
     }
 
+    public function notAlphaNumeric(string $field, ?string $message = null): self
+    {
+        $validation = new NotAlphaNumeric();
+        if ($message) {
+            $validation->setErrorMessage($message);
+        }
+
+        $this->addValidation($field, $validation);
+
+        return $this;
+    }
+
+    public function asciiAlphaNumeric(string $field, ?string $message = null): self
+    {
+        $validation = new AsciiAlphaNumeric();
+        if ($message) {
+            $validation->setErrorMessage($message);
+        }
+
+        $this->addValidation($field, $validation);
+
+        return $this;
+    }
+
+    public function notAsciiAlphaNumeric(string $field, ?string $message = null): self
+    {
+        $validation = new NotAsciiAlphaNumeric();
+        if ($message) {
+            $validation->setErrorMessage($message);
+        }
+
+        $this->addValidation($field, $validation);
+
+        return $this;
+    }
+
     private function handleFieldValidation(string $field, $value): void
     {
         if (!isset($this->validations[$field])) {
@@ -110,9 +150,9 @@ class Validator
 
     private function checkForRequiredFields(array $data): void
     {
-        foreach ($this->requiredFields as $requiredField) {
-            if (!isset($data[$requiredField])) {
-                $this->addError($requiredField, 'Field is required.');
+        foreach ($this->requiredFields as $field => $message) {
+            if (!isset($data[$field])) {
+                $this->addError($field, $message);
             }
         }
     }

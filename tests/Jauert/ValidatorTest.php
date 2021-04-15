@@ -30,7 +30,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['test' => ['Field is invalid.']], $validator->validate(['test' => 'bar']));
     }
 
-    public function testRegexIsntScalar()
+    public function testRegexIsNotScalar()
     {
         $validator = new Validator();
         $validator
@@ -109,5 +109,55 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $validator->alphaNumeric('test', 'Numbers and letters only');
 
         $this->assertEquals(['test' => ['Numbers and letters only']], $validator->validate(['test' => '']));
+    }
+
+    public function testNotAlphaNumeric()
+    {
+        $validator = new Validator();
+        $validator->notAlphaNumeric('test', 'Numbers and letters only');
+
+        $this->assertEquals(['test' => ['Numbers and letters only']], $validator->validate(['test' => '123']));
+        $this->assertEquals(['test' => ['Numbers and letters only']], $validator->validate(['test' => 'abcäüöß']));
+        $this->assertEquals([], $validator->validate(['test' => true]));
+        $this->assertEmpty($validator->validate(['test' => '+']));
+    }
+
+    public function testChainValidation()
+    {
+        $validator = new Validator();
+        $validator
+            ->email('mail', 'This is not a valid mail address.')
+            ->notBlank('username', 'The username is not allowed to have empty spaces.')
+            ->alphaNumeric('username', 'The username must be alphanumeric.')
+            ->requiredField('mail', 'Please provide a mail address.');
+
+        $this->assertEquals([
+            'mail' => [
+                'Please provide a mail address.'
+            ],
+            'username' => [
+                'The username must be alphanumeric.'
+            ]
+        ], $validator->validate([
+            'username' => 'Max Mustermann'
+        ]));
+    }
+
+    public function testAsciiAlphaNumeric()
+    {
+        $validator = new Validator();
+        $validator->asciiAlphaNumeric('test', 'Must be ascii');
+        $this->assertEquals([], $validator->validate(['test' => 'abc123']));
+        $this->assertEquals(['test' => ['Must be ascii']], $validator->validate(['test' => 'abcä']));
+        $this->assertEquals(['test' => ['Must be ascii']], $validator->validate(['test' => true]));
+    }
+
+    public function testNotAsciiAlphaNumeric()
+    {
+        $validator = new Validator();
+        $validator->notAsciiAlphaNumeric('test', 'Must not be ascii');
+        $this->assertEquals([], $validator->validate(['test' => 'abcäü']));
+        $this->assertEquals([], $validator->validate(['test' => true]));
+        $this->assertEquals(['test' => ['Must not be ascii']], $validator->validate(['test' => 'abc']));
     }
 }

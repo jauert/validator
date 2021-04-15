@@ -6,9 +6,9 @@ namespace Jauert\Validations;
 
 use Jauert\ValidationInterface;
 
-class AlphaNumeric extends RegEx implements ValidationInterface
+class AsciiAlphaNumeric extends RegEx implements ValidationInterface
 {
-    protected string $regEx = '/^[\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]+$/Du';
+    protected string $regEx = '/^[[:alnum:]]+$/';
 
     public function test($input): bool
     {
