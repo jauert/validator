@@ -160,4 +160,75 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $validator->validate(['test' => true]));
         $this->assertEquals(['test' => ['Must not be ascii']], $validator->validate(['test' => 'abc']));
     }
+
+    public function testLengthBetween()
+    {
+        $validator = new Validator();
+        $validator->lengthBetween('test', 1, 4, 'Length must be between 1 and 4 characters.');
+        $this->assertEmpty($validator->validate(['test' => 'test']));
+
+        $this->assertEquals(
+            ['test' => ['Length must be between 1 and 4 characters.']],
+            $validator->validate(['test' => ''])
+        );
+        $this->assertEquals(
+            ['test' => ['Length must be between 1 and 4 characters.']],
+            $validator->validate(['test' => 'testA'])
+        );
+        $this->assertEquals(
+            ['test' => ['Length must be between 1 and 4 characters.']],
+            $validator->validate(['test' => 'testA'])
+        );
+        $this->assertEquals(
+            ['test' => ['Length must be between 1 and 4 characters.']],
+            $validator->validate(['test' => null])
+        );
+    }
+
+    public function testEqualTo()
+    {
+        $validator = new Validator();
+        $validator->equalTo('test', true, 'Is not true!');
+
+        $this->assertEquals(
+            ['test' => ['Is not true!']],
+            $validator->validate(['test' => 1])
+        );
+    }
+
+    public function testMinLength()
+    {
+        $validator = new Validator();
+        $errorMessage = 'Minimum length is 3';
+        $validator->minLength('test', 3, $errorMessage);
+
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 12]));
+        $this->assertEmpty($validator->validate(['test' => 123]));
+        $this->assertEmpty($validator->validate(['test' => 1234]));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 'ab']));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => null]));
+        $this->assertEmpty($validator->validate(['test' => 'abcde']));
+    }
+
+    public function testMaxLength()
+    {
+        $validator = new Validator();
+        $errorMessage = 'Maximum length is 3';
+        $validator->maxLength('test', 3, $errorMessage);
+
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 1234]));
+        $this->assertEmpty($validator->validate(['test' => 123]));
+        $this->assertEmpty($validator->validate(['test' => 'abc']));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 'abcd']));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => null]));
+    }
+
+    public function testIsNumeric()
+    {
+        $validator = new Validator();
+        $validator->numeric('test', 'must be numeric');
+        $this->assertEquals(['test' => ['must be numeric']], $validator->validate(['test' => 'abc']));
+        $this->assertEmpty($validator->validate(['test' => 123]));
+        $this->assertEmpty($validator->validate(['test' => '123']));
+    }
 }

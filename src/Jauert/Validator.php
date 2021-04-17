@@ -7,9 +7,14 @@ namespace Jauert;
 use Jauert\Validations\AlphaNumeric;
 use Jauert\Validations\AsciiAlphaNumeric;
 use Jauert\Validations\Email;
+use Jauert\Validations\EqualTo;
+use Jauert\Validations\LengthBetween;
+use Jauert\Validations\MaxLength;
+use Jauert\Validations\MinLength;
 use Jauert\Validations\NotAlphaNumeric;
 use Jauert\Validations\NotAsciiAlphaNumeric;
 use Jauert\Validations\NotBlank;
+use Jauert\Validations\Numeric;
 use Jauert\Validations\RegEx;
 
 class Validator
@@ -85,6 +90,41 @@ class Validator
     public function notAsciiAlphaNumeric(string $field, ?string $message = null): self
     {
         $this->addValidation($field, new NotAsciiAlphaNumeric(), $message);
+
+        return $this;
+    }
+
+    public function lengthBetween(string $field, int $min, int $max, ?string $message = null)
+    {
+        $this->addValidation($field, new LengthBetween($min, $max), $message);
+
+        return $this;
+    }
+
+    public function equalTo(string $field, $equalTo, ?string $message = null)
+    {
+        $this->addValidation($field, new EqualTo($equalTo), $message);
+
+        return $this;
+    }
+
+    public function minLength(string $field, int $min, ?string $message = null)
+    {
+        $this->addValidation($field, new MinLength($min), $message);
+
+        return $this;
+    }
+
+    public function maxLength(string $field, int $max, ?string $message = null)
+    {
+        $this->addValidation($field, new MaxLength($max), $message);
+
+        return $this;
+    }
+
+    public function numeric(string $field, ?string $message = null)
+    {
+        $this->addValidation($field, new Numeric(), $message);
 
         return $this;
     }
