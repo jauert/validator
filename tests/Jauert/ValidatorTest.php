@@ -231,4 +231,17 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($validator->validate(['test' => 123]));
         $this->assertEmpty($validator->validate(['test' => '123']));
     }
+
+    public function testRange()
+    {
+        $validator = new Validator();
+        $errorMessage = 'Must be between 10 and 20';
+        $validator->range('test', 10, 20, $errorMessage);
+
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 'abc']));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 5]));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 21]));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => '8,5']));
+        $this->assertEmpty($validator->validate(['test' => 12]));
+    }
 }

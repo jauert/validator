@@ -15,6 +15,7 @@ use Jauert\Validations\NotAlphaNumeric;
 use Jauert\Validations\NotAsciiAlphaNumeric;
 use Jauert\Validations\NotBlank;
 use Jauert\Validations\Numeric;
+use Jauert\Validations\Range;
 use Jauert\Validations\RegEx;
 
 class Validator
@@ -125,6 +126,13 @@ class Validator
     public function numeric(string $field, ?string $message = null)
     {
         $this->addValidation($field, new Numeric(), $message);
+
+        return $this;
+    }
+
+    public function range(string $field, float $lower, float $upper, ?string $message = null)
+    {
+        $this->addValidation($field, new Range($lower, $upper), $message);
 
         return $this;
     }
