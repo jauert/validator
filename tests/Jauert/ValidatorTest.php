@@ -223,6 +223,17 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => null]));
     }
 
+    public function testMd5()
+    {
+        $validator = new Validator();
+        $errorMessage = 'Must be md5';
+        $validator->md5('test', $errorMessage);
+
+        $this->assertEmpty($validator->validate(['test' => md5('test')]));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => 'abcd']));
+        $this->assertEquals(['test' => [$errorMessage]], $validator->validate(['test' => null]));
+    }
+
     public function testIsNumeric()
     {
         $validator = new Validator();

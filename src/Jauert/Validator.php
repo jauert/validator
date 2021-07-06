@@ -10,6 +10,7 @@ use Jauert\Validations\Email;
 use Jauert\Validations\EqualTo;
 use Jauert\Validations\LengthBetween;
 use Jauert\Validations\MaxLength;
+use Jauert\Validations\Md5;
 use Jauert\Validations\MinLength;
 use Jauert\Validations\NotAlphaNumeric;
 use Jauert\Validations\NotAsciiAlphaNumeric;
@@ -121,6 +122,11 @@ class Validator
         $this->addValidation($field, new MaxLength($max), $message);
 
         return $this;
+    }
+
+    public function md5(string $field, ?string $message = null)
+    {
+        $this->addValidation($field, new Md5(), $message);
     }
 
     public function numeric(string $field, ?string $message = null)
