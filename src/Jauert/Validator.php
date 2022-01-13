@@ -7,6 +7,7 @@ namespace Jauert;
 use Jauert\Validations\AlphaNumeric;
 use Jauert\Validations\AsciiAlphaNumeric;
 use Jauert\Validations\ContainsLowerCase;
+use Jauert\Validations\ContainsNumber;
 use Jauert\Validations\ContainsSpecialChar;
 use Jauert\Validations\ContainsUpperCase;
 use Jauert\Validations\Email;
@@ -18,6 +19,7 @@ use Jauert\Validations\MinLength;
 use Jauert\Validations\NotAlphaNumeric;
 use Jauert\Validations\NotAsciiAlphaNumeric;
 use Jauert\Validations\NotBlank;
+use Jauert\Validations\NotEqualTo;
 use Jauert\Validations\Numeric;
 use Jauert\Validations\Range;
 use Jauert\Validations\RegEx;
@@ -99,6 +101,13 @@ class Validator
         return $this;
     }
 
+    public function containsNumber(string $field,int $min, ?string $message = null): self
+    {
+        $this->addValidation($field, new ContainsNumber($min), $message);
+
+        return $this;
+    }
+
     public function notAlphaNumeric(string $field, ?string $message = null): self
     {
         $this->addValidation($field, new NotAlphaNumeric(), $message);
@@ -130,6 +139,13 @@ class Validator
     public function equalTo(string $field, $equalTo, ?string $message = null)
     {
         $this->addValidation($field, new EqualTo($equalTo), $message);
+
+        return $this;
+    }
+
+    public function notEqualTo(string $field, $equalTo, ?string $message = null)
+    {
+        $this->addValidation($field, new NotEqualTo($equalTo), $message);
 
         return $this;
     }
