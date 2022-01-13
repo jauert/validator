@@ -6,6 +6,9 @@ namespace Jauert;
 
 use Jauert\Validations\AlphaNumeric;
 use Jauert\Validations\AsciiAlphaNumeric;
+use Jauert\Validations\ContainsLowerCase;
+use Jauert\Validations\ContainsSpecialChar;
+use Jauert\Validations\ContainsUpperCase;
 use Jauert\Validations\Email;
 use Jauert\Validations\EqualTo;
 use Jauert\Validations\LengthBetween;
@@ -71,6 +74,27 @@ class Validator
     public function alphaNumeric(string $field, ?string $message = null): self
     {
         $this->addValidation($field, new AlphaNumeric(), $message);
+
+        return $this;
+    }
+
+    public function containsSpecialChar(string $field, int $min, ?string $message = null): self
+    {
+        $this->addValidation($field, new ContainsSpecialChar($min), $message);
+
+        return $this;
+    }
+
+    public function containsUpperCase(string $field,int $min, ?string $message = null): self
+    {
+        $this->addValidation($field, new ContainsUpperCase($min), $message);
+
+        return $this;
+    }
+
+    public function containsLowerCase(string $field,int $min, ?string $message = null): self
+    {
+        $this->addValidation($field, new ContainsLowerCase($min), $message);
 
         return $this;
     }
