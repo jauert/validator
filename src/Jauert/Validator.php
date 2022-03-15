@@ -20,6 +20,7 @@ use Jauert\Validations\NotAlphaNumeric;
 use Jauert\Validations\NotAsciiAlphaNumeric;
 use Jauert\Validations\NotBlank;
 use Jauert\Validations\NotEqualTo;
+use Jauert\Validations\NotEqualToLowerCase;
 use Jauert\Validations\Numeric;
 use Jauert\Validations\Range;
 use Jauert\Validations\RegEx;
@@ -146,6 +147,13 @@ class Validator
     public function notEqualTo(string $field, $equalTo, ?string $message = null)
     {
         $this->addValidation($field, new NotEqualTo($equalTo), $message);
+
+        return $this;
+    }
+
+    public function notEqualToLowerCase(string $field, $equalTo, ?string $message = null)
+    {
+        $this->addValidation($field, new NotEqualToLowerCase($equalTo), $message);
 
         return $this;
     }
